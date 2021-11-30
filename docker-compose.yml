@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapp
+    restart: on-failure
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATA_MONGODB_.HOST=mongo
